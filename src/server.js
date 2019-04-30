@@ -1,5 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const validade = require('express-validate')
 const databaseConfig = require('./config/database')
 class App {
   constructor () {
@@ -8,6 +9,8 @@ class App {
     this.database()
     this.middlewares()
     this.routes()
+    /// manuseia conexoes eviar erros
+    this.exception()
   }
 
   database () {
@@ -31,6 +34,17 @@ class App {
 
   routes () {
     this.express.use(require('./routes'))
+  }
+  exception () {
+    /// formata o erro da validação
+    this.express.use((err, req, res, next) => {
+      if (err instanceof validade.ValidationsError) {
+        return res.status(err.status).json(err)
+      }
+      return res
+        .status(err.status || 500)
+        .json({ error: 'Internal server Error' })
+    })
   }
 }
 module.exports = new App().express
