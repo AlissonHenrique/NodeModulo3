@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const mongoosePaginate = require('mongoose-paginate')
+
 const Ad = new mongoose.Schema({
   title: {
     type: String,
@@ -9,15 +10,18 @@ const Ad = new mongoose.Schema({
     type: String,
     required: true
   },
-  // Relaciona user com o autor
   author: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: 'true'
+    required: true
   },
   price: {
     type: Number,
     required: true
+  },
+  purchasedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Purchase'
   },
   createdAt: {
     type: Date,

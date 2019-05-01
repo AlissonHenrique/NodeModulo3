@@ -1,9 +1,10 @@
 const express = require('express')
 const validate = require('express-validation')
-// handle para formatar error
 const handle = require('express-async-handler')
+
 const routes = express.Router()
-const authMIddleware = require('./app/middlewares/auth')
+
+const authMiddleware = require('./app/middlewares/auth')
 
 const controllers = require('./app/controllers')
 const validators = require('./app/validators')
@@ -19,10 +20,11 @@ routes.post(
   handle(controllers.SessionController.store)
 )
 
-routes.use(authMIddleware)
+routes.use(authMiddleware)
 
-/** rotas Ads */
-routes.get('/teste', authMIddleware, (req, res) => res.json({ ok: true }))
+/**
+ * Ads
+ */
 routes.get('/ads', handle(controllers.AdController.index))
 routes.get('/ads/:id', handle(controllers.AdController.show))
 routes.post(
@@ -37,11 +39,15 @@ routes.put(
 )
 routes.delete('/ads/:id', handle(controllers.AdController.destroy))
 
-/** purchase */
+/**
+ * Purchases
+ */
 routes.post(
   '/purchases',
   validate(validators.Purchase),
   handle(controllers.PurchaseController.store)
 )
+
+routes.put('/purchases/:id', handle(controllers.ApproveController.update))
 
 module.exports = routes
