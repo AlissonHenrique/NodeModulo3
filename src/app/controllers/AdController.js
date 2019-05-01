@@ -28,7 +28,8 @@ class AdController {
   }
 
   // mostrar o unico
-  async show (req, res) {
+  async show (req, res, next) {
+    throw new Error()
     const ad = await Ad.findById(req.params.id)
     return res.json(ad)
   }
